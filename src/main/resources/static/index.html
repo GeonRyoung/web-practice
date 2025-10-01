@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>My Movie List</title>
+    <style>
+        /* 간단한 스타일을 추가합니다 */
+        body { font-family: sans-serif; margin: 2em; }
+        #movie-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1em; }
+        li { border: 1px solid #ccc; border-radius: 8px; padding: 1em; text-align: center; }
+        img { max-width: 100%; height: auto; border-radius: 4px; }
+        h3 { margin: 0.5em 0; }
+    </style>
+</head>
+<body>
+
+<h1>🎬 인기 영화 목록</h1>
+
+<ul id="movie-list"></ul>
+
+<script>
+    // ===== 여기서부터 새로 추가된 JavaScript 코드입니다! =====
+
+    // 웹 페이지의 모든 HTML 요소가 로드된 후에 이 코드를 실행합니다.
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // 우리 서버의 API에 GET 요청을 보냅니다.
+        fetch('/api/movies')
+            .then(response => response.json()) // 응답을 JSON 형태로 변환합니다.
+            .then(movies => { // 변환된 영화 목록(배열) 데이터를 받습니다.
+
+                // id가 'movie-list'인 <ul> 태그를 찾습니다.
+                const movieList = document.getElementById('movie-list');
+
+                // 영화 목록을 하나씩 돌면서 화면에 추가합니다.
+                movies.forEach(movie => {
+                    // <li> 태그를 하나 만듭니다.
+                    const listItem = document.createElement('li');
+
+                    // 포스터 이미지 URL을 완성합니다. TMDB는 이미지 기본 주소와 파일 경로를 조합해야 합니다.
+                    const imageUrl = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
+
+                    // <li> 태그 안에 들어갈 HTML 내용을 만듭니다.
+                    listItem.innerHTML = `
+                            <img src="${imageUrl}" alt="${movie.title} poster">
+                            <h3>${movie.title}</h3>
+                            <p>(${movie.releaseYear})</p>
+                        `;
+
+                    // 완성된 <li> 태그를 <ul> 태그의 자식으로 추가합니다.
+                    movieList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('영화 목록을 가져오는 중 오류 발생:', error);
+            });
+    });
+</script>
+
+</body>
+</html>
