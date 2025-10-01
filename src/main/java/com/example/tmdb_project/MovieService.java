@@ -1,6 +1,8 @@
 package com.example.tmdb_project;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +11,39 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository movieRepository;
+    private final RestTemplate restTemplate;
 
-    public MovieService(MovieRepository movieRepository) {
+    @Value("${tmdb.api.key}")
+    private String apikey;
+
+    public MovieService(MovieRepository movieRepository, RestTemplate restTemplate) {
         this.movieRepository = movieRepository;
+        this.restTemplate = restTemplate;
+    }
+
+    public void fetchPopularMoviesAndSave(){
+        String url = "https://api.themoviedb.org/3/movie/popular?api_key="
+                + apikey
+                + "&language=ko-KR";
+
+        TmdbResponseDto response = restTemplate.getForObject(url, TmdbResponseDto.class);
+
+        if(response !=null && response.getResults() != null){
+
+            for(TmdbMovieDto tmdbMovie : response.getResults()){
+                Movie movie = new Movie();
+                movie.setId(tmdbMovie.getId());
+                movie.setTitle(tmdbMovie.getTitle());
+                movie.setOverview(tmdbMovie.getOverview());
+                if(tmdbMovie.getReleaseDate() != null && !tmdbMovie.getReleaseDate().isEmpty());{
+                    int year = Integer.parseInt(tmdbMovie.getReleaseDate().substring(0, 4));
+                    movie.setReleaseYear(year);
+                }
+                movie.setPosterPath(tmdbMovie.getPosterPath());
+
+                movieRepository.save(movie);
+            }
+        }
     }
 
     public Movie createMovie(CreateMovieRequestDto requestDto){
