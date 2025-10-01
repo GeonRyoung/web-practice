@@ -14,6 +14,16 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    @GetMapping("/api/movies/{id}")
+    public Movie getMovieById(@PathVariable Long id){
+        return movieService.getMovieById(id);
+    }
+
+    @GetMapping("/api/movies/search")
+    public List<Movie> searchMovies(@RequestParam String title){
+        return movieService.searchMovie(title);
+    }
+
     @GetMapping("/api/movies")
     public List<Movie> getAllMovies(){
         return movieService.getAllMovies();

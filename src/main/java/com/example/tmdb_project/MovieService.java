@@ -21,6 +21,10 @@ public class MovieService {
         this.restTemplate = restTemplate;
     }
 
+    public List<Movie> searchMovie(String title){
+        return movieRepository.findByTitleContaining(title);
+    }
+
     public void fetchPopularMoviesAndSave(){
         String url = "https://api.themoviedb.org/3/movie/popular?api_key="
                 + apikey
@@ -44,6 +48,11 @@ public class MovieService {
                 movieRepository.save(movie);
             }
         }
+    }
+
+    public Movie getMovieById(Long id){
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(("Movie not found with id: " + id)));
     }
 
     public Movie createMovie(CreateMovieRequestDto requestDto){
