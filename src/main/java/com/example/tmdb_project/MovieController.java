@@ -1,9 +1,7 @@
 package com.example.tmdb_project;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +22,15 @@ public class MovieController {
     @PostMapping("/api/movies")
     public Movie createMovie(@RequestBody CreateMovieRequestDto requestDto){
         return movieService.createMovie(requestDto);
+    }
+
+    @PutMapping("/api/movies/{id}")
+    public Movie updateMovie(@PathVariable Long id, @RequestBody CreateMovieRequestDto requestDto){
+        return movieService.updateMovie(id, requestDto);
+    }
+
+    @DeleteMapping("/api/movies/{id}")
+    public void deleteMovie(@PathVariable Long id){
+        movieService.deleteMovie(id);
     }
 }
