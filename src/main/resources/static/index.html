@@ -17,6 +17,8 @@
 
 <h1>🎬 영화 목록</h1>
 
+<a href="/add-movie.html" style="margin-bottom: 1em; display: inline-block;">+ 새 영화 추가하기</a>
+
 <div id="search-container">
     <input type="text" id="search-input" placeholder="영화 제목을 입력하세요...">
     <button id="search-button">검색</button>
@@ -37,11 +39,23 @@
             movies.forEach(movie => {
                 const listItem = document.createElement('li');
                 const imageUrl = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
+
+                // ===== 변경된 부분 시작 =====
+                // a 태그로 전체 내용을 감싸서 링크를 만듭니다.
+                // href 속성에 detail.html?id=영화ID 형식으로 주소를 지정합니다.
                 listItem.innerHTML = `
-                        <img src="${imageUrl}" alt="${movie.title} poster">
-                        <h3>${movie.title}</h3>
-                        <p>(${movie.releaseYear})</p>
-                    `;
+            <a href="detail.html?id=${movie.id}">
+                <img src="${imageUrl}" alt="${movie.title} poster">
+                <h3>${movie.title}</h3>
+                <p>(${movie.releaseYear})</p>
+            </a>
+        `;
+                // ===== 변경된 부분 끝 =====
+
+                // a 태그에 스타일을 추가하여 밑줄을 없앱니다.
+                listItem.querySelector('a').style.textDecoration = 'none';
+                listItem.querySelector('a').style.color = 'inherit';
+
                 movieList.appendChild(listItem);
             });
         };

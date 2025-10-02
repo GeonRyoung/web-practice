@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Detail</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        a { color: #007bff; }
+        #movie-detail { display: flex; gap: 2em; }
+        #movie-poster img { max-width: 300px; border-radius: 8px; }
+        #movie-info h1 { margin-top: 0; }
+        /* 삭제 버튼 스타일 추가 */
+        #delete-button { background-color: #dc3545; color: white; border: none; padding: 0.5em 1em; border-radius: 4px; cursor: pointer; margin-top: 1em;}
+    </style>
+</head>
+<body>
+<p><a href="/">&laquo; 목록으로 돌아가기</a></p>
+<hr>
+
+<div id="movie-detail"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const movieDetail = document.getElementById('movie-detail');
+
+        if (movieId) {
+            fetch(`/api/movies/${movieId}`)
+                .then(response => response.json())
+                .then(movie => {
+                    const imageUrl = `https://image.tmdb.org/t/p/w500${movie.posterPath}`;
+                    movieDetail.innerHTML = `
+                            <div id="movie-poster">
+                                <img src="${imageUrl}" alt="${movie.title} poster">
+                            </div>
+                            <div id="movie-info">
+                                <h1>${movie.title}</h1>
+                                <h2>(${movie.releaseYear})</h2>
+                                <p>${movie.overview}</p>
+                                <a href="edit-movie.html?id=${movie.id}" id="edit-button" style="background-color: #28a745; color: white; padding: 0.5em 1em; border-radius: 4px; text-decoration: none;">
+                                정보 수정하기 </a>
+                                <button id="delete-button">이 영화 삭제하기</button>
+                            </div>
+                        `;
+
+                    // ===== 2. 삭제 기능 JavaScript 추가 =====
+                    const deleteButton = document.getElementById('delete-button');
+                    deleteButton.addEventListener('click', () => {
+                        // 사용자에게 정말 삭제할 것인지 확인받습니다.
+                        if (confirm('정말로 이 영화 정보를 삭제하시겠습니까?')) {
+                            fetch(`/api/movies/${movieId}`, {
+                                method: 'DELETE' // DELETE 메서드로 요청
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        alert('영화가 성공적으로 삭제되었습니다.');
+                                        window.location.href = '/'; // 삭제 후 목록 페이지로 이동
+                                    } else {
+                                        alert('삭제에 실패했습니다.');
+                                    }
+                                })
+                                .catch(error => console.error('삭제 중 오류 발생:', error));
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('영화 상세 정보를 가져오는 중 오류 발생:', error);
+                    movieDetail.innerHTML = '<p>영화 정보를 불러오는 데 실패했습니다.</p>';
+                });
+        } else {
+            movieDetail.innerHTML = '<p>영화 ID가 지정되지 않았습니다.</p>';
+        }
+    });
+</script>
+
+</body>
+</html>

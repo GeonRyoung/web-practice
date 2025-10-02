@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Movie</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; max-width: 600px; }
+        form { display: flex; flex-direction: column; gap: 1em; }
+        .form-group { display: flex; flex-direction: column; }
+        label { margin-bottom: 0.5em; font-weight: bold; }
+        input, textarea { padding: 0.5em; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #28a745; color: white; border: none; padding: 0.75em; border-radius: 4px; cursor: pointer; font-size: 1em; }
+    </style>
+</head>
+<body>
+<p><a href="/">&laquo; 목록으로 돌아가기</a></p>
+<hr>
+
+<h1>✏️ 영화 정보 수정하기</h1>
+
+<form id="edit-movie-form">
+    <input type="hidden" id="id">
+
+    <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" id="title" required>
+    </div>
+    <div class="form-group">
+        <label for="releaseYear">출시년도</label>
+        <input type="number" id="releaseYear" required>
+    </div>
+    <div class="form-group">
+        <label for="posterPath">포스터 경로</label>
+        <input type="text" id="posterPath">
+    </div>
+    <div class="form-group">
+        <label for="overview">줄거리</label>
+        <textarea id="overview" rows="5"></textarea>
+    </div>
+    <button type="submit">수정하기</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('edit-movie-form');
+        const idInput = document.getElementById('id');
+        const titleInput = document.getElementById('title');
+        const releaseYearInput = document.getElementById('releaseYear');
+        const posterPathInput = document.getElementById('posterPath');
+        const overviewInput = document.getElementById('overview');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+
+        // --- 1. 페이지 로드 시: 기존 데이터 불러와서 폼에 채워넣기 ---
+        if (movieId) {
+            fetch(`/api/movies/${movieId}`)
+                .then(response => response.json())
+                .then(movie => {
+                    idInput.value = movie.id;
+                    titleInput.value = movie.title;
+                    releaseYearInput.value = movie.releaseYear;
+                    posterPathInput.value = movie.posterPath;
+                    overviewInput.value = movie.overview;
+                })
+                .catch(error => console.error('Error fetching movie details:', error));
+        }
+
+        // --- 2. 폼 제출 시: 수정된 데이터 서버로 전송하기 ---
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const updatedMovieData = {
+                title: titleInput.value,
+                releaseYear: releaseYearInput.value,
+                posterPath: posterPathInput.value,
+                overview: overviewInput.value
+            };
+
+            fetch(`/api/movies/${movieId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedMovieData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('영화 정보가 성공적으로 수정되었습니다.');
+                        window.location.href = `detail.html?id=${movieId}`; // 수정 후 상세 페이지로 이동
+                    } else {
+                        alert('수정에 실패했습니다.');
+                    }
+                })
+                .catch(error => console.error('수정 중 오류 발생:', error));
+        });
+    });
+</script>
+</body>
+</html>
