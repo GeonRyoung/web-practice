@@ -1,5 +1,10 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.service;
 
+import com.example.tmdb_project.repository.MovieRepository;
+import com.example.tmdb_project.dto.TmdbMovieDto;
+import com.example.tmdb_project.dto.TmdbResponseDto;
+import com.example.tmdb_project.dto.CreateMovieRequestDto;
+import com.example.tmdb_project.entity.Movie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

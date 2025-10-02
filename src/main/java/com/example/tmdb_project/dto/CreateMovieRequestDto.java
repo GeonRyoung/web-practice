@@ -1,4 +1,4 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.dto;
 
 import lombok.Getter;
 import lombok.Setter;

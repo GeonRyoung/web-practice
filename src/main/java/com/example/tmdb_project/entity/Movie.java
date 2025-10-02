@@ -1,4 +1,4 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

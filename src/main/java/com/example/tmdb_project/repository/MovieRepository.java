@@ -1,5 +1,6 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.repository;
 
+import com.example.tmdb_project.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

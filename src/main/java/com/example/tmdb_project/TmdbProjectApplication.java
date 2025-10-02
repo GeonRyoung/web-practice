@@ -1,5 +1,6 @@
 package com.example.tmdb_project;
 
+import com.example.tmdb_project.service.MovieService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

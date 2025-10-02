@@ -1,4 +1,4 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

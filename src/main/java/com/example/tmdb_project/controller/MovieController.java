@@ -1,6 +1,8 @@
-package com.example.tmdb_project;
+package com.example.tmdb_project.controller;
 
-import org.springframework.stereotype.Repository;
+import com.example.tmdb_project.dto.CreateMovieRequestDto;
+import com.example.tmdb_project.entity.Movie;
+import com.example.tmdb_project.service.MovieService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
