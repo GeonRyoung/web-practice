@@ -77,10 +77,12 @@
                 overview: overviewInput.value
             };
 
+            const token = localStorage.getItem('jwt');
             fetch(`/api/movies/${movieId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': token
                 },
                 body: JSON.stringify(updatedMovieData),
             })

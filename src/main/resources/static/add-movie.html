@@ -58,11 +58,13 @@
             overview: document.getElementById('overview').value
         };
 
+        const token = localStorage.getItem('jwt');
         // 3. fetch를 이용해 서버에 POST 요청을 보냅니다.
-        fetch('/api/movies', {
+        fetch(`/api/movies/${movieId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // 보내는 데이터가 JSON 형식임을 알려줍니다.
+                'Authorization': token // 헤더 추가
             },
             body: JSON.stringify(movieData), // JavaScript 객체를 JSON 문자열로 변환합니다.
         })

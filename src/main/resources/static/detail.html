@@ -26,7 +26,13 @@
         const movieDetail = document.getElementById('movie-detail');
 
         if (movieId) {
-            fetch(`/api/movies/${movieId}`)
+            const token = localStorage.getItem('jwt');
+
+            fetch(`/api/movies/${movieId}`, {
+                headers: {
+                    'Authorization': token // 헤더 추가
+                }
+            })
                 .then(response => response.json())
                 .then(movie => {
                     const imageUrl = `https://image.tmdb.org/t/p/w500${movie.posterPath}`;

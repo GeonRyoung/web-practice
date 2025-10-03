@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { width: 300px; padding: 2em; border: 1px solid #ccc; border-radius: 8px; }
+        form { display: flex; flex-direction: column; gap: 1em; }
+        .form-group { display: flex; flex-direction: column; }
+        label { margin-bottom: 0.5em; font-weight: bold; }
+        input { padding: 0.5em; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; border: none; padding: 0.75em; border-radius: 4px; cursor: pointer; font-size: 1em; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>로그인</h2>
+    <form id="login-form">
+        <div class="form-group">
+            <label for="username">사용자 이름</label>
+            <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit">로그인</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('login-form');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const loginData = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+        };
+
+
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginData),
+        })
+            .then(response => {
+                if (response.ok) {
+                    // 1. 응답 헤더에서 Authorization 헤더(JWT)를 가져옵니다.
+                    const token = response.headers.get('Authorization');
+
+                    // 2. 가져온 토큰을 브라우저의 localStorage에 저장합니다.
+                    localStorage.setItem('jwt', token);
+
+                    alert('로그인에 성공했습니다!');
+                    window.location.href = '/'; // 로그인 성공 후 메인 페이지로 이동
+                } else {
+                    alert('사용자 이름 또는 비밀번호가 일치하지 않습니다.');
+                }
+            })
+            .catch(error => console.error('로그인 중 오류 발생:', error));
+    });
+</script>
+</body>
+</html>

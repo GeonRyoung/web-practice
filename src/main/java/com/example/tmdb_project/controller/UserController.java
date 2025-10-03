@@ -26,6 +26,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto){
         String token = userService.login(requestDto);
-        return ResponseEntity.ok().header("Autorization", "Bearer " + token).body("로그인 성공");
+        return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("로그인 성공");
     }
 }
