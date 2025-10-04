@@ -13,16 +13,6 @@ Spring Boot와 JPA, Spring Security를 사용하여 영화 정보를 다루고, 
 
 <br>
 
-## 🖼️ API 테스트 화면
-
-**로그인 및 JWT 발급**
-![로그인 API 테스트 스크린샷](URL_링크)
-
-**영화 목록 조회 (인증 필요)**
-![영화 조회 API 테스트 스크린샷](URL_링크)
-
-<br>
-
 ## 🛠️ 기술 스택
 
 **Backend**
@@ -84,12 +74,6 @@ Spring Boot와 JPA, Spring Security를 사용하여 영화 정보를 다루고, 
 | GET    | `/api/movies/search?title={title}`  | 영화 제목으로 검색      | O         |
 | POST   | `/api/movies/{movieId}/reviews`     | 특정 영화에 리뷰 작성   | O         |
 | GET    | `/api/movies/{movieId}/reviews`     | 특정 영화의 리뷰 목록 조회| O         |
-
-<br>
-
-## 📊 ERD (데이터베이스 관계 다이어그램)
-
-![ERD 이미지](URL_링크)
 
 <br>
 
