@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -22,5 +24,11 @@ public class ReviewController {
                                                           @AuthenticationPrincipal UserDetailsImpl userDetails){
         ReviewResponseDto responseDto = reviewService.createReview(movieId, requestDto, userDetails.getUser());
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("movies/{movieId}/reviews")
+    public ResponseEntity<List<ReviewResponseDto>> getReviewForMovie(@PathVariable Long movieId){
+        List<ReviewResponseDto> responseDtos = reviewService.getReviewsForMovie(movieId);
+        return ResponseEntity.ok(responseDtos);
     }
 }

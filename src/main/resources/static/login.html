@@ -2,68 +2,61 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { width: 300px; padding: 2em; border: 1px solid #ccc; border-radius: 8px; }
-        form { display: flex; flex-direction: column; gap: 1em; }
-        .form-group { display: flex; flex-direction: column; }
-        label { margin-bottom: 0.5em; font-weight: bold; }
-        input { padding: 0.5em; border: 1px solid #ccc; border-radius: 4px; }
-        button { background-color: #007bff; color: white; border: none; padding: 0.75em; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f8f9fa; }
+        .login-form { width: 100%; max-width: 330px; padding: 15px; margin: auto; }
     </style>
 </head>
-<body>
-<div class="login-container">
-    <h2>로그인</h2>
+<body class="text-center">
+
+<main class="login-form">
     <form id="login-form">
-        <div class="form-group">
+        <h1 class="h3 mb-3 fw-normal">🎬 My Movie App</h1>
+        <h2 class="h5 mb-3 fw-normal">로그인</h2>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" placeholder="Username" required>
             <label for="username">사용자 이름</label>
-            <input type="text" id="username" required>
         </div>
-        <div class="form-group">
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" required>
             <label for="password">비밀번호</label>
-            <input type="password" id="password" required>
         </div>
-        <button type="submit">로그인</button>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
     </form>
-</div>
+</main>
 
 <script>
+    // JavaScript 로직은 이전과 동일합니다.
     const form = document.getElementById('login-form');
-
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-
         const loginData = {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value,
         };
-
-
         fetch('/api/auth/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData),
         })
             .then(response => {
                 if (response.ok) {
-                    // 1. 응답 헤더에서 Authorization 헤더(JWT)를 가져옵니다.
                     const token = response.headers.get('Authorization');
-
-                    // 2. 가져온 토큰을 브라우저의 localStorage에 저장합니다.
                     localStorage.setItem('jwt', token);
-
                     alert('로그인에 성공했습니다!');
-                    window.location.href = '/'; // 로그인 성공 후 메인 페이지로 이동
+                    window.location.href = '/';
                 } else {
                     alert('사용자 이름 또는 비밀번호가 일치하지 않습니다.');
                 }
             })
-            .catch(error => console.error('로그인 중 오류 발생:', error));
+            .catch(error => console.error('Error during login:', error));
     });
 </script>
+
 </body>
 </html>
